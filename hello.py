@@ -2,7 +2,8 @@ def app(environ, start_response):
     request_method = environ['REQUEST_METHOD']
     if request_method == 'GET':
         query_string = environ['QUERY_STRING']
-        params = query_string.split('?')
+        params = query_string.split('&')
+        response_body = ''
         for param in params:
             response_body= response_body + param + '\r\n'
         status = '200 OK'
