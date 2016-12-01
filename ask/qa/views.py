@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger
 from django.http import HttpResponse
 from qa.models import Question, User
 
@@ -9,7 +9,10 @@ def get_page(request):
     questions = Question.objects.new()
     paginator = Paginator(questions, 10)
     paginator.baseurl = '/?page='
-    q_to_show = paginator.page(page)
+    try:
+        q_to_show = paginator.page(page)
+    except PageNotAnInteger:
+        q_to_show = paginator.page(1)
     return render(request, 'page.html', {
         'questions': q_to_show.object_list,
         'paginator': paginator,
@@ -21,7 +24,10 @@ def get_popular(request):
     questions = Question.objects.popular()
     paginator = Paginator(questions, 10)
     paginator.baseurl = '/?page='
-    q_to_show = paginator.page(page)
+    try:
+        q_to_show = paginator.page(page)
+    except PageNotAnInteger:
+        q_to_show = paginator.page(1)
     return render(request, 'page.html', {
         'questions': q_to_show.object_list,
         'paginator': paginator,
