@@ -19,5 +19,6 @@ urlpatterns = [
     url(r'^$', views.get_page, name='get_page'),
     url(r'^popular/$', views.get_popular, name='get_popular'),
     url(r'^question/(?P<question_id>\d+)/$', views.get_question, name='get_question'),
+    url(r'^ask/$', views.add_question, name='add_question'),
     url(r'^admin/', include(admin.site.urls)),
 ]
