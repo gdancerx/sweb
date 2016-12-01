@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.forms import UserCreationForm
+from django.views import generic
 from qa.models import Question, User
 from qa.forms import AskForm, AnswerForm
 
@@ -39,6 +41,7 @@ def get_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
     if request.method == "POST":
         form = AnswerForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             answer = form.save()
             url = question.get_url()
@@ -53,6 +56,7 @@ def get_question(request, question_id):
 def add_question(request):
     if request.method == "POST":
         form = AskForm(request.POST)
+        form._user = request.user
         if form.is_valid():
             question = form.save()
             url = question.get_url()
@@ -62,4 +66,11 @@ def add_question(request):
     return render(request, 'ask.html', {
         'form': form
     })
+
+class signup(generic.CreateView):
+    form_class = UserCreationForm
+    model = User
+    template_name = 'signup.html'
+    success_url = '/'
+   
 
