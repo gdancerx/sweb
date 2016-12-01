@@ -1,5 +1,6 @@
 from django import forms
-from qa.models import Question, Answer
+from django.contrib.auth.forms import UserCreationForm
+from qa.models import Question, Answer, User
 
 class AskForm(forms.Form):
     title = forms.CharField(label="Title", max_length=150)
@@ -25,3 +26,15 @@ class AnswerForm(forms.Form):
         a = Answer(**self.cleaned_data)
         a.save()
         return a
+
+class SignupForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+    def save(self, commit=True):
+        user = super(UserCreationForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
