@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger
 from django.http import HttpResponse
 from qa.models import Question, User
+from qa.forms import AskForm, AnswerForm
 
 def get_page(request):
     page = request.GET.get('page')
@@ -36,8 +37,29 @@ def get_popular(request):
 
 def get_question(request, question_id):
     question = get_object_or_404(Question, id=question_id)
+    if request.method == "POST":
+        form = AnswerForm(request.POST)
+        if form.is_valid():
+            answer = form.save()
+            url = question.get_url()
+            return HttpResponseRedirect(url)
+    else:
+        form = AnswerForm(initial={'question': question.id})
     return render(request, 'question.html', {
-        'question': question,
+        'q': question,
+        'form': form,
     })
 
+def add_question(request):
+    if request.method == "POST":
+        form = AskForm(request.POST)
+        if form.is_valid():
+            question = form.save()
+            url = question.get_url()
+            return HttpResponseRedirect(url)
+    else:
+        form = AskForm()
+    return render(request, 'ask.html', {
+        'form': form
+    })
 
