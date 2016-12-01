@@ -1,8 +1,20 @@
-<h2>Question id= {{ question.id }}</h2>
-<h1>{{ question.title }}</h1>
-<p>{{ question.text }}</p>
+<h2>Question id= {{ q.id }}</h2>
+<h1>{{ q.title }}</h1>
+<p>{{ q.text }}</p>
 <ol>
-{% for answer in question.answer_set.all %}
+{% for answer in q.answer_set.all %}
     <li>{{ answer.text }}</li>
 {% endfor %}
 </ol>
+<form method="post" action="/question/{{ q.id }}/">
+    {% csrf_token %}
+    <fieldset>
+        {% for field in form %}
+            <div>
+                <label>{{ field.label }}</label>
+                <div>{{ field }}</div>
+            </div>
+        {% endfor %}
+        <input type="submit" value="Submit" />
+    </fieldset>
+</form>
