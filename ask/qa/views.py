@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, render_to_response, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger
 from django.http import HttpResponse, HttpResponseRedirect
 from qa.models import Question, User
