@@ -27,14 +27,12 @@ class AnswerForm(forms.Form):
         a.save()
         return a
 
-class SignupForm(UserCreationForm):
-    email = forms.EmailField(required=True)
-    class Meta:
-        model = User
-        fields = ("username", "email", "password")
-    def save(self, commit=True):
-        user = super(UserCreationForm, self).save(commit=False)
-        user.email = self.cleaned_data["email"]
-        if commit:
-            user.save()
+class SignupForm(forms.Form):
+    username = forms.CharField(label="Username:")
+    email = forms.EmailField(label="Email:")
+    password = forms.CharField(label="Password:", widget=forms.PasswordInput)
+    def clean(self):
+        return self.cleaned_data
+    def save(self):
+        user = User.objects.create_user(self.cleaned_data['username'], self.cleaned_data['email'], self.cleaned_data['password'])
         return user
