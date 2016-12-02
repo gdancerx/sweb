@@ -72,9 +72,11 @@ def signup(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('/')
-    args = {}
-    args.update(csrf(request))
-    args['form'] = SignupForm()
-    return render_to_response('signup.html', args)
+    else:
+        form = SignupForm()
+    return render(request, 'signup.html', {
+        'form': form
+    })
+
 
 
