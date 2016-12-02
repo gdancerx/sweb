@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from qa.models import Question, User
 from qa.forms import AskForm, AnswerForm, SignupForm
 from django.core.context_processors import csrf
+from django.contrib.auth import authenticate, login
 
 def get_page(request):
     page = request.GET.get('page')
